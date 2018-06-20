@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Model;
+use App\Command;
+use App\Order;
+use App\Response;
 
 class CommandResourceController extends Controller
 {
@@ -13,7 +18,9 @@ class CommandResourceController extends Controller
      */
     public function index()
     {
-        //
+        $commands = Command::paginate(10); //paginate posts to group of n.
+
+        return view('EdaContent.displayCommands', ['commands' => $commands]);
     }
 
     /**
@@ -23,7 +30,7 @@ class CommandResourceController extends Controller
      */
     public function create()
     {
-        //
+        return view('EdaContent.addCommand');
     }
 
     /**
@@ -34,7 +41,16 @@ class CommandResourceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request)
+        {
+            $order = $request->get('command_order');
+            $response = $request->get('command_response');
+            $is_command = $request->get('is_command');
+
+            dd($order, $response, $is_command);
+
+            return redirect('/commands');
+        }
     }
 
     /**
@@ -56,7 +72,8 @@ class CommandResourceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $command = Command::where('id', $id)->first();
+        return view('EdaContent.updateCommand')->with('command',$command);
     }
 
     /**
@@ -68,7 +85,14 @@ class CommandResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if($request && $id)
+        {
+            $order = $request->get('command_order');
+            $response = $request->get('command_response');
+            $is_command = $request->get('is_command');
+
+            dd($order, $response, $is_command);
+        }
     }
 
     /**
@@ -80,5 +104,11 @@ class CommandResourceController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function deleteCommand($id)
+    {
+        dd($id);
+        return redirect('/commands');
     }
 }
