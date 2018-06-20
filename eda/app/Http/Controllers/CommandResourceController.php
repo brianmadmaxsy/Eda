@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Database\Eloquent\Model;
 use App\Command;
 use App\Order;
 use App\Response;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class CommandResourceController extends Controller
 {
@@ -18,7 +19,11 @@ class CommandResourceController extends Controller
      */
     public function index()
     {
-        $commands = Command::paginate(10); //paginate posts to group of n.
+        //$commands = Command::paginate(10); //paginate posts to group of n.
+        $commands = DB::table('commands')
+            ->leftJoin('orders', 'commands.order_id', '=', 'orders.id')
+            ->leftJoin('responses', 'commands.response_id', '=', 'responses.id')
+            ->paginate(10);
 
         return view('EdaContent.displayCommands', ['commands' => $commands]);
     }
@@ -43,11 +48,27 @@ class CommandResourceController extends Controller
     {
         if($request)
         {
-            $order = $request->get('command_order');
-            $response = $request->get('command_response');
+            $post_order = $request->get('command_order');
+            $post_response = $request->get('command_response');
             $is_command = $request->get('is_command');
 
-            dd($order, $response, $is_command);
+            //dd($order, $response,$is_command);
+
+            $order = new Order;
+            $order->cmd_order_text = $post_order;
+            $order->save();
+
+            $response = new Response;
+            $response->cmd_order_id = $order->id;
+            $response->cmd_response_text = $post_response;
+            $response->save();
+
+            $command = new Command;
+            $command->order_id = $order->id;
+            $command->response_id = $response->id;
+            $command->is_command = $is_command;
+            $command->status = 1;
+            $command->save();
 
             return redirect('/commands');
         }
