@@ -52,20 +52,17 @@ class CommandResourceController extends Controller
             $post_response = $request->get('command_response');
             $is_command = $request->get('is_command');
 
-            //dd($order, $response,$is_command);
-
-            $order = new Order;
-            $order->cmd_order_text = $post_order;
+            //create a logic that checks in order table if order exist. Add if not exist, if exist just get the order id.
+            $order = Order::firstOrNew(['cmd_order_text' => $post_order]);
             $order->save();
 
-            $response = new Response;
-            $response->cmd_order_id = $order->id;
-            $response->cmd_response_text = $post_response;
+            //create a logic that checks in responses table if response existed. Add if not exist, if exist just get the response id.
+            $response = Response::firstOrNew(['cmd_response_text' => $post_response]);
             $response->save();
 
             $command = new Command;
-            $command->order_id = $order->id;
-            $command->response_id = $response->id;
+            $command->order_id = $order->id; //gets the order id of newly created order.
+            $command->response_id = $response->id; //gets the response id of newly created response.
             $command->is_command = $is_command;
             $command->status = 1;
             $command->save();
@@ -106,14 +103,7 @@ class CommandResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if($request && $id)
-        {
-            $order = $request->get('command_order');
-            $response = $request->get('command_response');
-            $is_command = $request->get('is_command');
-
-            dd($order, $response, $is_command);
-        }
+        //
     }
 
     /**

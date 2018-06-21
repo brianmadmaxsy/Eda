@@ -15,7 +15,6 @@ class CreateResponsesTable extends Migration
     {
         Schema::create('responses', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('cmd_order_id');
             $table->text('cmd_response_text');
             $table->timestamps();
         });
