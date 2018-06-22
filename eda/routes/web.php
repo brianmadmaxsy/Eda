@@ -16,4 +16,4 @@ Route::get('/', function () {
 });
 
 Route::resource('commands','CommandResourceController');
-Route::get('commands/{id}/delete', 'EdaResourceController@deleteCommand');
+Route::get('commands/{id}/delete', 'CommandResourceController@deleteCommand');

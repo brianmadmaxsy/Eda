@@ -23,15 +23,15 @@
                 {
                 ?>
                 <tr>
-                    <td><a href="commands/{{ $command->id }}">{{ $command->id }}</a></td>
+                    <td><a href="commands/{{ $command->command_id }}">{{ $command->command_id }}</a></td>
                     <td>{{ $command->cmd_order_text }}</td>
                     <td>{{ $command->cmd_response_text }}</td>
                     <td>{{ $command->is_command }}</td>
                     <td>{{ $command->status }}</td>
                     <td>{{ $command->created_at }}</td>
                     <td>{{ $command->updated_at }}</td>
-                    <td><a href="commands/{{ $command->id }}/edit" class="btn btn-primary">Update</a></td>
-                    <td><a href="commands/{{ $command->id }}/delete" class="btn btn-warning" onclick="return confirm('Delete command {{ $command->id }}?')">Remove</a></td>
+                    <td><a href="commands/{{ $command->command_id }}/edit" class="btn btn-primary">Update</a></td>
+                    <td><a href="commands/{{ $command->command_id }}/delete" class="btn btn-warning" onclick="return confirm('Delete command {{ $command->command_id }}?')">Remove</a></td>
                 </tr>
                 <?php
                 }

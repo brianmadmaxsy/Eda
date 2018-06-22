@@ -20,9 +20,9 @@ class CommandResourceController extends Controller
     public function index()
     {
         //$commands = Command::paginate(10); //paginate posts to group of n.
-        $commands = DB::table('commands')
-            ->leftJoin('orders', 'commands.order_id', '=', 'orders.id')
-            ->leftJoin('responses', 'commands.response_id', '=', 'responses.id')
+        $commands = Command::leftJoin('orders', 'commands.cmd_order_id', '=', 'orders.order_id')
+            ->leftJoin('responses', 'commands.cmd_response_id', '=', 'responses.response_id')
+            ->orderBy('commands.cmd_order_id')
             ->paginate(10);
 
         return view('EdaContent.displayCommands', ['commands' => $commands]);
@@ -60,11 +60,20 @@ class CommandResourceController extends Controller
             $response = Response::firstOrNew(['cmd_response_text' => $post_response]);
             $response->save();
 
+/*
             $command = new Command;
-            $command->order_id = $order->id; //gets the order id of newly created order.
-            $command->response_id = $response->id; //gets the response id of newly created response.
+            $command->cmd_order_id = ($order->order_id ? $order->order_id : $order->id); //gets the new or existing order id of newly created order.
+            $command->cmd_response_id = ($response->response_id ? $response->response_id : $response->id); //gets the new or existing response id of newly created response.
             $command->is_command = $is_command;
             $command->status = 1;
+            $command->save();
+*/
+            $command = Command::firstOrNew([
+                'cmd_order_id' => ($order->order_id ? $order->order_id : $order->id), //gets the new or existing order id of newly created order.
+                'cmd_response_id' => ($response->response_id ? $response->response_id : $response->id), //gets the new or existing response id of newly created response.
+                'is_command' => $is_command,
+                'status' => 1
+            ]);
             $command->save();
 
             return redirect('/commands');
@@ -90,7 +99,12 @@ class CommandResourceController extends Controller
      */
     public function edit($id)
     {
-        $command = Command::where('id', $id)->first();
+        $command = DB::table('commands')
+            ->leftJoin('orders', 'commands.cmd_order_id', '=', 'orders.order_id')
+            ->leftJoin('responses', 'commands.cmd_response_id', '=', 'responses.response_id')
+            ->where('commands.command_id', $id)
+            ->first();
+
         return view('EdaContent.updateCommand')->with('command',$command);
     }
 
@@ -103,7 +117,27 @@ class CommandResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if($request && $id)
+        {
+            $updated_order = $request->get('command_order');
+            $updated_response = $request->get('command_response');
+            $updated_is_command = $request->get('is_command');
+
+            //create a logic that checks in order table if order exist. Add if not exist, if exist just get the order id.
+            $order = Order::firstOrNew(['cmd_order_text' => $updated_order]);
+            $order->save();
+
+            //create a logic that checks in responses table if response existed. Add if not exist, if exist just get the response id.
+            $response = Response::firstOrNew(['cmd_response_text' => $updated_response]);
+            $response->save();
+
+            $command = Command::where('command_id', $id)
+                    ->update(['cmd_order_id' => ($order->order_id ? $order->order_id : $order->id), 'cmd_response_id' => ($response->response_id ? $response->response_id : $response->id), 'is_command' => $updated_is_command]);
+
+            if($command) {
+                return redirect('/commands');
+            }
+        }
     }
 
     /**
@@ -117,9 +151,10 @@ class CommandResourceController extends Controller
         //
     }
 
-    public function deleteCommand($id)
+    public function deleteCommand($command_id)
     {
-        dd($id);
+        $command = Command::destroy($command_id);
+
         return redirect('/commands');
     }
 }

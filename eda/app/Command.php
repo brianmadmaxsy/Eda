@@ -9,6 +9,7 @@ class Command extends Model
 {
     use SoftDeletes;
     protected $table = "commands";
-    protected $fillable = ['order_id', 'response_id', 'is_command', 'status'];
+    protected $primaryKey = 'command_id';
+    protected $fillable = ['cmd_order_id', 'cmd_response_id', 'is_command', 'status'];
     protected $dates = ['deleted_at'];
 }

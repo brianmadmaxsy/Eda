@@ -4,21 +4,21 @@
 <div class="container">
     <div class="row">
         <h2>Update Command</h2>
-        <form method="post" action="/commands/{{ $command['id'] }}">
+        <form method="post" action="/commands/{{ $command->command_id }}">
             <div class="form-group">
                 <label for="exampleFormControlInput1">Your Order</label>
-                <input name="command_order" type="text" class="form-control" id="exampleFormControlInput1" value="{{ $command['command_order'] }}" required="">
+                <input name="command_order" type="text" class="form-control" id="exampleFormControlInput1" value="{{ $command->cmd_order_text }}" required="">
             </div>
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Eda's Response</label>
-                <textarea name="command_response" class="form-control" id="exampleFormControlTextarea1" rows="3" required="">{{ $command['command_response'] }}</textarea>
+                <textarea name="command_response" class="form-control" id="exampleFormControlTextarea1" rows="3" required="">{{ $command->cmd_response_text }}</textarea>
             </div>
             <div class="form-group">
                 <label for="exampleFormControlInput1">Type</label>
                 <select name="is_command" class="form-control" id="sel1" required="">
                     <option value="">Choose Command Type</option>
-                    <option value="0" <?php echo $command['is_command'] == 0 ? 'selected' : '' ?>>Text</option>
-                    <option value="1" <?php echo $command['is_command'] == 1 ? 'selected' : '' ?>>Command</option>
+                    <option value="0" <?php echo $command->is_command == 0 ? 'selected' : '' ?>>Text</option>
+                    <option value="1" <?php echo $command->is_command == 1 ? 'selected' : '' ?>>Command</option>
                 </select>
             </div>
             <div class="form-group">
