@@ -3,15 +3,15 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <h2>Update Command</h2>
+        <h2>Update Command ({{ $command->command_id }})</h2>
         <form method="post" action="/commands/{{ $command->command_id }}">
             <div class="form-group">
                 <label for="exampleFormControlInput1">Your Order</label>
-                <input name="command_order" type="text" class="form-control" id="exampleFormControlInput1" value="{{ $command->cmd_order_text }}" required="">
+                <input name="command_order" type="text" class="form-control" id="exampleFormControlInput1" value="{{ $command->order->cmd_order_text }}" required="">
             </div>
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Eda's Response</label>
-                <textarea name="command_response" class="form-control" id="exampleFormControlTextarea1" rows="3" required="">{{ $command->cmd_response_text }}</textarea>
+                <textarea name="command_response" class="form-control" id="exampleFormControlTextarea1" rows="3" required="">{{ $command->response->cmd_response_text }}</textarea>
             </div>
             <div class="form-group">
                 <label for="exampleFormControlInput1">Type</label>
