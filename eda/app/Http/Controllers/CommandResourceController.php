@@ -19,12 +19,7 @@ class CommandResourceController extends Controller
      */
     public function index()
     {
-        //$commands = Command::paginate(10); //paginate posts to group of n.
-        $commands = Command::leftJoin('orders', 'commands.cmd_order_id', '=', 'orders.order_id')
-            ->leftJoin('responses', 'commands.cmd_response_id', '=', 'responses.response_id')
-            ->orderBy('commands.cmd_order_id')
-            ->paginate(10);
-
+        $commands = Command::orderBy('cmd_order_id')->paginate(10);
         return view('EdaContent.displayCommands', ['commands' => $commands]);
     }
 
@@ -60,14 +55,6 @@ class CommandResourceController extends Controller
             $response = Response::firstOrNew(['cmd_response_text' => $post_response]);
             $response->save();
 
-/*
-            $command = new Command;
-            $command->cmd_order_id = ($order->order_id ? $order->order_id : $order->id); //gets the new or existing order id of newly created order.
-            $command->cmd_response_id = ($response->response_id ? $response->response_id : $response->id); //gets the new or existing response id of newly created response.
-            $command->is_command = $is_command;
-            $command->status = 1;
-            $command->save();
-*/
             $command = Command::firstOrNew([
                 'cmd_order_id' => ($order->order_id ? $order->order_id : $order->id), //gets the new or existing order id of newly created order.
                 'cmd_response_id' => ($response->response_id ? $response->response_id : $response->id), //gets the new or existing response id of newly created response.
@@ -99,11 +86,7 @@ class CommandResourceController extends Controller
      */
     public function edit($id)
     {
-        $command = DB::table('commands')
-            ->leftJoin('orders', 'commands.cmd_order_id', '=', 'orders.order_id')
-            ->leftJoin('responses', 'commands.cmd_response_id', '=', 'responses.response_id')
-            ->where('commands.command_id', $id)
-            ->first();
+        $command = Command::isCommand($id)->first();
 
         return view('EdaContent.updateCommand')->with('command',$command);
     }
@@ -148,7 +131,7 @@ class CommandResourceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        echo $id;
     }
 
     public function deleteCommand($command_id)

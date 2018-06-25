@@ -24,8 +24,8 @@
                 ?>
                 <tr>
                     <td><a href="commands/{{ $command->command_id }}">{{ $command->command_id }}</a></td>
-                    <td>{{ $command->cmd_order_text }}</td>
-                    <td>{{ $command->cmd_response_text }}</td>
+                    <td>{{ $command->order->cmd_order_text }}</td>
+                    <td>{{ $command->response->cmd_response_text }}</td>
                     <td>{{ $command->is_command }}</td>
                     <td>{{ $command->status }}</td>
                     <td>{{ $command->created_at }}</td>
