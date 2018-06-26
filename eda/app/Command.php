@@ -15,7 +15,7 @@ class Command extends Model
 
     public function scopeIsCommand($query,$id)
     {
-        return $query->where('command_id', '=', $id);
+        return $query->where('command_id', $id);
     }
 
     public function order()
