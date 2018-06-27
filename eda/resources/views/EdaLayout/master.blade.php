@@ -1,7 +1,7 @@
 <!DOCTYPE html><!--EdaLayout/master.blade.php-->
 <html>
 <head>
-    <title>Eda AI</title>
+    <title>{{ config('app.name') }} Mark 1</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
 </head>
 <body>
