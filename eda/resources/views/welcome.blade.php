@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{{ config('app.name') }}</title>
+    <title>{{ config('app.name') }} Mark 1</title>
 
     <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/half-slider.css') }}">
@@ -15,9 +15,9 @@
 
   <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top hf-background">
       <div class="container">
-        <a class="navbar-brand" href="#">Project {{ config('app.name') }}</a>
+        <a class="navbar-brand" href="/">{{ config('app.name') }}</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -51,21 +51,21 @@
         </ol>
         <div class="carousel-inner" role="listbox">
           <!-- Slide One - Set the background image for this slide in the line below -->
-          <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
+          <div class="carousel-item active" style="background-image: url('{{ asset('images/circa.png') }}')">
             <div class="carousel-caption d-none d-md-block">
               <h3>Speech Recognition</h3>
               <p>This is a description for the first slide.</p>
             </div>
           </div>
           <!-- Slide Two - Set the background image for this slide in the line below -->
-          <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
+          <div class="carousel-item" style="background-image: url('{{ asset('images/Azureflux.jpg') }}')">
             <div class="carousel-caption d-none d-md-block">
               <h3>Personal Assistant</h3>
               <p>This is a description for the second slide.</p>
             </div>
           </div>
           <!-- Slide Three - Set the background image for this slide in the line below -->
-          <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
+          <div class="carousel-item" style="background-image: url('{{ asset('images/bluerigs.jpg') }}')">
             <div class="carousel-caption d-none d-md-block">
               <h3>Artificial Intelligence</h3>
               <p>This is a description for the third slide.</p>
@@ -86,13 +86,13 @@
     <!-- Page Content -->
     <section class="py-5">
       <div class="container">
-        <h1>Personal Assistant and Artificial Intelligence</h1>
-        <p>Project Eda is a beta speech recognition personal assistant and artificial intelligence software made by Lauren Brian Sy.</p>
+        <h1>Project Eda</h1>
+        <p>Project Eda is a beta speech recognition virtual assistant and artificial intelligence software made by SYstematix.</p>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-5 bg-dark">
+    <footer class="py-5 hf-background">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Project Eda 2018</p>
       </div>

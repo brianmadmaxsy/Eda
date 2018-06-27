@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="row">
-        <h2>Eda's Commands</h2>
+        <h2>Commands</h2>
         <table class="table">
             <thead>
                 <tr>
