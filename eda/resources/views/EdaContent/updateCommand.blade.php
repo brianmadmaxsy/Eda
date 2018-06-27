@@ -1,6 +1,17 @@
 @extends('EdaLayout.master')
 
 @section('content')
+
+<?php
+if(session()->get('message_header') && session()->get('message_body') && session()->get('message_type')=="error")
+{
+?>
+<div class="alert alert-danger" role="alert">
+  {{ session()->get('message_header').": ".session()->get('message_body') }}
+</div>
+<?php
+}
+?>
 <div class="container">
     <div class="row">
         <h2>Update Command ({{ $command->command_id }})</h2>
@@ -25,6 +36,8 @@
                 {{ csrf_field() }}
                 <input name="_method" type="hidden" value="PUT">
                 <input type="submit" name="save" value="Update" class="btn btn-info">
+
+                <a href="{{ route('deleteCommand', $command->command_id) }}" class="btn btn-warning" onclick="return confirm('Delete command {{ $command->command_id }}?')">Delete Command</a>
             </div>
             <div class="form-group">
                 <a href="/commands">Back to Posts</a>

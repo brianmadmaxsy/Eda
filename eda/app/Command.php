@@ -13,9 +13,37 @@ class Command extends Model
     protected $fillable = ['cmd_order_id', 'cmd_response_id', 'is_command', 'status'];
     protected $dates = ['deleted_at'];
 
-    public function scopeIsCommand($query,$id)
+    public function scopeCommandId($query,$id)
     {
-        return $query->where('command_id', $id);
+        if($id){
+            return $query->where('command_id', $id);
+        }
+    }
+
+    public function scopeOrderId($query, $orderid)
+    {
+        if($orderid){
+            return $query->where('cmd_order_id', $orderid);
+        }
+    }
+
+    public function scopeResponseId($query, $responseid)
+    {
+        if($responseid){
+            return $query->where('cmd_response_id', $responseid);
+        }
+    }
+
+    public function scopeCommandType($query, $is_command)
+    {
+        if($is_command){
+            return $query->where('is_command',$is_command);
+        }
+    }
+
+    public function scopeIsActive($query)
+    {
+        return $query->where('status', 1);
     }
 
     public function order()

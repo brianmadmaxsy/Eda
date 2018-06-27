@@ -55,13 +55,25 @@ class CommandResourceController extends Controller
             $response = Response::firstOrNew(['cmd_response_text' => $post_response]);
             $response->save();
 
-            $command = Command::firstOrNew([
-                'cmd_order_id' => ($order->order_id ? $order->order_id : $order->id), //gets the new or existing order id of newly created order.
-                'cmd_response_id' => ($response->response_id ? $response->response_id : $response->id), //gets the new or existing response id of newly created response.
-                'is_command' => $is_command,
-                'status' => 1
-            ]);
-            $command->save();
+            //Restore newly created command if exist in database but soft deleted. Should not create new data.
+            $restoreCommand = Command::withTrashed()
+                                ->orderId(($order->order_id ? $order->order_id : $order->id))
+                                ->responseId(($response->response_id ? $response->response_id : $response->id))
+                                ->commandType($is_command)
+                                ->isActive()
+                                ->restore();
+
+            //If command is new and not soft deleted, create new command.
+            if(isset($restoreCommand)) //If $restoreCommand didn't restore any soft deleted command.
+            {
+                $command = Command::firstOrNew([
+                    'cmd_order_id' => ($order->order_id ? $order->order_id : $order->id), //gets the new or existing order id of newly created order.
+                    'cmd_response_id' => ($response->response_id ? $response->response_id : $response->id), //gets the new or existing response id of newly created response.
+                    'is_command' => $is_command,
+                    'status' => 1
+                ]);
+                $command->save();
+            }
 
             return redirect('/commands');
         }
@@ -86,9 +98,9 @@ class CommandResourceController extends Controller
      */
     public function edit($id)
     {
-        $command = Command::isCommand($id)->first();
+        $command = Command::commandId($id)->first();
 
-        return view('EdaContent.updateCommand')->with('command',$command);
+        return view('EdaContent.updateCommand')->with('command', $command)->with(['message_header' => '', 'message_body' => '', 'message_type' => '']);
     }
 
     /**
@@ -114,11 +126,26 @@ class CommandResourceController extends Controller
             $response = Response::firstOrNew(['cmd_response_text' => $updated_response]);
             $response->save();
 
-            $command = Command::where('command_id', $id)
+            //check if updated command already exist
+            $command = Command::orderId(($order->order_id ? $order->order_id : $order->id))
+                                ->responseId(($response->response_id ? $response->response_id : $response->id))
+                                ->commandType($updated_is_command)
+                                ->isActive();
+
+            if($command->count()) //If updated command already exist, show error message.
+            {
+                $message_header = "Update Failed";
+                $message_body = "Command already existed! If you dont need this command anymore, you can just delete this command.";
+                return redirect('/commands/'.$id.'/edit')
+                    ->with(['message_header' => $message_header, 'message_body' => $message_body, 'message_type' => 'error']);
+            }
+            else{
+                $command = Command::commandId($id)
                     ->update(['cmd_order_id' => ($order->order_id ? $order->order_id : $order->id), 'cmd_response_id' => ($response->response_id ? $response->response_id : $response->id), 'is_command' => $updated_is_command]);
 
-            if($command) {
-                return redirect('/commands');
+                if($command) {
+                    return redirect('/commands');
+                }
             }
         }
     }
