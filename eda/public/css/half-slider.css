@@ -17,3 +17,7 @@
 .hf-background{
     background-color: #154360;
 }
+
+.card {
+  height: 100%;
+}
