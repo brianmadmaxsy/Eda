@@ -11,7 +11,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Body</label>
-                <textarea name="note_body" id="article-ckeditor" class="form-control" rows="3"></textarea>
+                <textarea name="note_body" id="article-ckeditor" class="form-control"></textarea>
             </div>
             <div class="form-group">
                 <input type="submit" name="save" value="Save" class="btn btn-info">
