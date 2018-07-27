@@ -17,3 +17,4 @@ Route::get('/', function () {
 
 Route::resource('commands','CommandResourceController');
 Route::get('commands/{id}/delete', 'CommandResourceController@deleteCommand')->name('deleteCommand');
+Route::resource('notes', 'NotesResourceController');
